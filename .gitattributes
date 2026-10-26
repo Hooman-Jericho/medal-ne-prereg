@@ -1,0 +1,3 @@
+manifest/manifest.csv -text
+manifest/manifest.sha256 -text
+*.csv -text

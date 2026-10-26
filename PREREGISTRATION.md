@@ -8,7 +8,7 @@
 | Author | Hooman Soleymani, Islamic Azad University, Tehran North Branch |
 | Supervisor | Dr. Nava Eslami, Islamic Azad University, North Tehran Branch |
 | Registered at | git tag `prereg-v1` and OSF Registries (TODO(lock): OSF link) |
-| Code | TODO(lock): repository URL |
+| Code | https://github.com/Hooman-Jericho/medal-ne-prereg |
 | Data | MEDAL, Cochrane subset. Wang & Chen, *Patterns* 7:101519 (2026) |
 
 ---
