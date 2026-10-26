@@ -124,7 +124,7 @@ C11/C12 draw from a fixed seed. For C13/C14, the k hard-negative abstracts are t
 
 ## 6. Models, prompts and scoring
 
-**Models.** Two open-weight, instruction-tuned models of 7 to 8 billion parameters. Required: logits accessible, context window of at least 16k tokens, and a training cutoff documented. M1 = `meta-llama/Llama-3.1-8B-Instruct`, revision TODO(lock): commit hash. M2 = `Qwen/Qwen2.5-7B-Instruct`, revision TODO(lock): commit hash. Qwen does not publish an exact training cutoff; I note this in section 14. M1 also writes the retrieval queries for both models (section 4.2). The choice is made at lock and not changed after.
+**Models.** Two open-weight, instruction-tuned models of 7 to 8 billion parameters. Required: logits accessible, context window of at least 16k tokens, and a training cutoff documented. M1 = `meta-llama/Llama-3.1-8B-Instruct`, revision `0e9e39f249a16976918f6564b8830bc894c89659`. M2 = `Qwen/Qwen2.5-7B-Instruct`, revision `a09a35458c702b33eeacc393d103063234e8bc28`. Both read from the Hugging Face API on 26 Oct 2026. Qwen does not publish an exact training cutoff; I note this in section 14. M1 also writes the retrieval queries for both models (section 4.2). The choice is made at lock and not changed after.
 
 **Prompts.** The primary prompt P1, the paraphrases P2 and P3, the query prompt and the screening prompt are in Appendix A. They are frozen at lock. P2 and P3 are run only on C0, C10 and C16.
 
@@ -275,7 +275,7 @@ Hooman Soleymani: design, code, analysis, writing; first author. Dr. Eslami: sup
 | PubMed fetch (25 Oct 2026) | 8,450 of 8,490 CD-DOIs found (99.5%); 40 not found; 8,447 eligible rows with an abstract (yes 5,115 / no 2,288 / NE 1,044) |
 | Search-date coverage (26 Oct 2026, final rule) | 8,294 of 8,447 extracted (98.2%); day 4,147 / month 3,703 / issue 367 / week 45 / year 32; 153 to fallback |
 | Search-date check (n correct / 50) | 48 / 50 (threshold 45). Both misses were "later search not incorporated"; rule added, those two re-extracted correctly. No fresh 50 drawn after the rule change |
-| M1, M2, judge model, revisions | M1 Llama-3.1-8B-Instruct, M2 Qwen2.5-7B-Instruct, judge claude-sonnet-5-5 (API); revisions TODO(lock): commit hashes |
+| M1, M2, judge model, revisions | M1 Llama-3.1-8B-Instruct, M2 Qwen2.5-7B-Instruct, judge claude-sonnet-5-5 (API); revisions Llama `0e9e39f249a16976918f6564b8830bc894c89659`, Qwen `a09a35458c702b33eeacc393d103063234e8bc28` (Hugging Face, 26 Oct 2026) |
 | Supervisor feedback | 25 Oct 2026, by message: she reviewed my plan, called the path complete and good and the hypotheses realistic. She had not yet seen this file. Approval of this version: TODO(lock): date |
 
 ---
