@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+# raw data and PubMed metadata are not redistributed (dataset licence not yet checked)
+data/
+*.jsonl
+manifest_out/
+audit_out/
+.env
