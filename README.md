@@ -2,7 +2,7 @@
 
 A baseline-aware, time-valid evaluation of retrieval-augmented generation (RAG) for evidence-based clinical QA. The study builds on the Cochrane subset of MEDAL (Wang & Chen, *Patterns* 7:101519, 2026).
 
-**Status:** preregistration draft v1.4. No model has been run on the study sample. Lock target: 28 Oct 2026.
+**Status:** preregistration draft v1.5. No model has been run on the study sample. Lock target: 30 Oct 2026. A second phase (a learned retrieval-side component) will be registered separately before the main run.
 
 Hooman Soleymani (Islamic Azad University, Tehran North Branch), supervised by Dr. Nava Eslami (Islamic Azad University, North Tehran Branch).
 

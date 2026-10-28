@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| Version | 1.4 (draft; lock target 28 Oct 2026) |
+| Version | 1.5 (draft; lock target 30 Oct 2026) |
 | Author | Hooman Soleymani, Islamic Azad University, Tehran North Branch |
 | Supervisor | Dr. Nava Eslami, Islamic Azad University, North Tehran Branch |
 | Registered at | git tag `prereg-v1` and OSF Registries (TODO(lock): OSF link) |
@@ -70,7 +70,7 @@ Section 11 lays out in advance what I will conclude under each combination of ou
 - Stratified by class and by tertile of review year (nine strata of about 100). The tertile cut points are computed on all eligible rows pooled, before the draw. This matters: no-evidence reviews are newer in the file (median year 2018, against 2016 for yes and no), and without the stratification year would be tangled up with class.
 - At most 1 question per review (CD number) across the whole sample. When a review has several eligible rows, the seeded draw picks one. A dry run on the real file with a throwaway seed reaches 300 per class from 900 distinct reviews, so the cap is feasible; the no-evidence class has 964 distinct reviews.
 - If 300 no-evidence questions can't be reached under that cap after the PubMed step, I relax it to 2 per review, then 3. If that still fails, I take every eligible no-evidence question and shrink the other two classes to match. Whatever happens gets reported.
-- Seed: the lock date as an integer (YYYYMMDD). I'm choosing it this way so nobody, me included, can say I shopped for a draw.
+- Seed: 20261028, the planned lock date as an integer (YYYYMMDD), fixed before the draw. The sample was drawn on 26 Oct 2026, before any model run. If the lock slips by a day or two, the seed and the manifest stay as they are; I will not redraw. I chose it this way so nobody, me included, can say I shopped for a draw.
 - The sampled question IDs are written to `manifest.csv`, and its SHA-256 hash goes in the registration log before any model run.
 
 **Reduced design.** If at the second gate (10 Nov) the pipeline isn't ready for 900, I drop to 200 per class. I keep all 17 conditions; I do not drop conditions to save time. This is the only pre-approved change to the sample.
@@ -197,7 +197,7 @@ All labelled exploratory in the paper, no correction.
 - Rate of "no evidence" predictions by decile of top-1 re-ranker score. This is my attempt to separate "retrieval failed" from "the evidence doesn't exist".
 - A descriptive typing of the no-evidence items by the generator's own supporting note, with a fixed keyword rule (section 6 of `audit_medal.py`, frozen at lock): N1, the note says no eligible studies were found (34.5% of the 1,049 eligible items in the file I inspected); N2, the note describes an inconclusive, low-certainty or non-significant result (43.5%); the rest are mixed or unclear. N1 are reviews with nothing to find, which is where newer studies are most likely to change the answer, so I expect H4 to be strongest there. H1 and H4 are repeated within N1 and within N2. This is exploratory and I'm writing the expectation down so it can't be claimed afterwards.
 - H1 and H4 repeated on the no-evidence questions the stage-1 screen types as (a) only, together with the share of each type. If most no-evidence labels turn out to be type (b), the main analysis stays as registered and I say plainly what it measures.
-- Prompt sensitivity: P1 vs P2 vs P3 on C0, C10 and C16; do the signs of the primary effects hold?
+- Prompt sensitivity and prompt tuning: P1 vs P2 vs P3 on C0, C10 and C16; do the signs of the primary effects hold? Added after Dr. Eslami's suggestion (28 Oct 2026, before lock): a fourth prompt P4 is P1 plus three worked examples (one per class). The examples come from eligible questions outside the manifest and outside the pilot, chosen by a seeded draw (seed 20261028) and frozen at G2 (10 Nov), before any main run. P4 runs on the same three conditions. I report how much P4 moves $\text{AUROC}_{NE}$ in C0 and C10, and whether the sign of the C10 vs C0 difference changes. This is exploratory and does not enter the three primary tests. Trained (soft) prompt tuning is not part of this study (see the last item of section 14).
 - Review search year against each model's training cutoff (before vs after), for contamination.
 - The sensitivity analyses named above: without `date_fallback`, without stage-1 flags.
 - Query-author swap: on 150 randomly chosen questions, M2 writes the queries instead of M1. I report the overlap of the top-10 retrieved records (Jaccard) and whether the sign of the C10 effect on those questions is the same.
@@ -245,18 +245,20 @@ Every change goes in `AMENDMENTS.md` with the date, the reason, and whether I ha
 - Qwen2.5 has no officially published training cutoff, and Llama-3.1's (December 2023) falls before some of the reviews. Memorisation of post-cutoff reviews is therefore possible for either model. The no-context condition C0 shows how much the models already know, and I report it next to every result.
 - The stage-1 judge is a commercial model I can't inspect. It is a screen only, and its flags are tested in a sensitivity analysis.
 - The physician audit may not finish in time.
-- My novelty search was a skim of about eight papers. The related-work table will not be final until I've read at least ten in full (target: 28 Oct). TODO(lock): add the table link.
-- Adaptive choice of k is a possible second phase. It would get its own registration, and only if the class-wise effects in this study differ from each other.
+- My novelty search was a skim of about eight papers. The related-work table will not be final until I've read at least ten in full (target: 3 Nov). The table link is added to this file as a documentation-only amendment, since it changes nothing in the design.
+- A second phase is planned: a learned retrieval-side component (for example an auto-encoder over retrieved-context features that feeds no-evidence detection, suggested by Dr. Eslami on 28 Oct 2026), and possibly trained (soft) prompt tuning and adaptive choice of k. None of it is part of the present study. Its protocol is written and registered separately by 10 Nov (G2), before the main run starts, so it is written without seeing any primary result. It would train only on questions outside the manifest and the pilot (and outside the manifest's review numbers) and be evaluated on the manifest. Only its training and evaluation runs come after Phase 1, and the paper will say so.
 
 ## 15. Timeline
 
 | Gate | Date | Condition |
 |---|---|---|
-| G1 | 28 Oct | This file locked (git tag and OSF); prompts frozen; 10 papers read |
-| G2 | 10 Nov | MEDAL baseline reproduced (C0, C2 on M1); search-date accuracy ≥ 90%; manifest hashed; leakage tests pass; pilot and power simulation done |
+| G1 | 30 Oct | This file locked (git tag and OSF); prompts frozen |
+| G1b | 3 Nov | Related-work table finished (at least 10 papers read in full); link added by amendment |
+| G2 | 10 Nov | MEDAL baseline reproduced (C0, C2 on M1); search-date accuracy ≥ 90%; manifest hashed; leakage tests pass; pilot and power simulation done; P4 examples frozen; **Phase 2 protocol written and registered separately, before the main run** |
 | G3 | 24 Nov | 17 conditions × 900 questions on M1; P2, P3 on three conditions |
 | G4 | 1 Dec | Primary tests; M2 replication; transition tables; stage-1 screen; physician list frozen |
 | G5 | 8 Dec | 4 to 6 page draft to Dr. Eslami |
+| Phase 2 | Dec to Jan | Run the separately registered Phase 2 (learned component), then the full paper |
 | P | with Dr. Eslami | Physician audit, ideally before submission |
 
 ## 16. Roles
@@ -270,12 +272,13 @@ Hooman Soleymani: design, code, analysis, writing; first author. Dr. Eslami: sup
 | Lock date | TODO(lock) |
 | git commit and tag | TODO(lock) |
 | OSF registration | TODO(lock) |
-| `manifest.csv` SHA-256 | `ad89017e1fea0ef482497cbc4220e72a9e00cea09b2c82e44a9252a867eb6cd0` (seed 20261028; 900 questions from 900 distinct reviews, 300 per class, 100 per stratum, cap 1 per review; 9 with `date_fallback = 1`; drawn 26 Oct 2026 before any model run). TODO(lock): confirm the lock date is still 28 Oct, otherwise redraw with the new date |
+| `manifest.csv` SHA-256 | `ad89017e1fea0ef482497cbc4220e72a9e00cea09b2c82e44a9252a867eb6cd0` (seed 20261028; 900 questions from 900 distinct reviews, 300 per class, 100 per stratum, cap 1 per review; 9 with `date_fallback = 1`; drawn 26 Oct 2026 before any model run). no redraw if the lock date moves (section 3) |
 | Dataset structure check (25 Oct 2026) | 8,533 rows; 2 empty labels; 43 non-CD DOIs; 8,488 eligible (yes 5,138 / no 2,301 / NE 1,049); 7,111 CD numbers; `abstract` and `publication_year` empty in the file; dry-run draw feasible with 1 per review |
 | PubMed fetch (25 Oct 2026) | 8,450 of 8,490 CD-DOIs found (99.5%); 40 not found; 8,447 eligible rows with an abstract (yes 5,115 / no 2,288 / NE 1,044) |
 | Search-date coverage (26 Oct 2026, final rule) | 8,294 of 8,447 extracted (98.2%); day 4,147 / month 3,703 / issue 367 / week 45 / year 32; 153 to fallback |
 | Search-date check (n correct / 50) | 48 / 50 (threshold 45). Both misses were "later search not incorporated"; rule added, those two re-extracted correctly. No fresh 50 drawn after the rule change |
 | M1, M2, judge model, revisions | M1 Llama-3.1-8B-Instruct, M2 Qwen2.5-7B-Instruct, judge claude-sonnet-5-5 (API); revisions Llama `0e9e39f249a16976918f6564b8830bc894c89659`, Qwen `a09a35458c702b33eeacc393d103063234e8bc28` (Hugging Face, 26 Oct 2026) |
+| Supervisor suggestions (28 Oct 2026) | Prompt tuning: P4 added to section 10. Learned retrieval-side component (auto-encoder): Phase 2, registered separately before the main run (section 14). |
 | Supervisor feedback | 25 Oct 2026, by message: she reviewed my plan, called the path complete and good and the hypotheses realistic. She had not yet seen this file. Approval of this version: TODO(lock): date |
 
 ---
