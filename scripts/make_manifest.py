@@ -8,9 +8,9 @@ Implements section 3 and section 4.1 of PREREGISTRATION.md. It reads DATA ONLY
 Usage (same folder as audit_medal.py):
     python make_manifest.py 1-QA-systematic-review.jsonl --meta pubmed_meta.jsonl --out manifest_out
 
-The seed is the LOCK DATE as an integer (YYYYMMDD). The default is 20261028.
-If the lock date changes, pass --seed with the new lock date. Do not try
-several seeds: the first run that you register is the one that counts.
+The seed is the planned lock date as an integer (YYYYMMDD), 20261028, fixed before
+the draw. The seed does not change if the lock slips. Do not try several seeds:
+the first run that you register is the one that counts.
 
 Writes, in --out:
     manifest.csv         the sample (one row per question), sorted by doi

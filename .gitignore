@@ -6,3 +6,4 @@ data/
 manifest_out/
 audit_out/
 .env
+qa_out/
