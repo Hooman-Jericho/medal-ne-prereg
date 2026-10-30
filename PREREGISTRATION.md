@@ -4,10 +4,10 @@
 
 | | |
 |---|---|
-| Version | 1.5 (draft; lock target 30 Oct 2026) |
+| Version | 1.6 (locked 30 Oct 2026). Version 1.5, which Dr. Eslami approved, plus administrative fields only; no design change |
 | Author | Hooman Soleymani, Islamic Azad University, Tehran North Branch |
 | Supervisor | Dr. Nava Eslami, Islamic Azad University, North Tehran Branch |
-| Registered at | git tag `prereg-v1` and OSF Registries (TODO(lock): OSF link) |
+| Registered at | git tag `prereg-v1` and OSF Registries. The commit hash and the OSF link are recorded in `AMENDMENTS.md`, because they cannot sit inside the file they identify |
 | Code | https://github.com/Hooman-Jericho/medal-ne-prereg |
 | Data | MEDAL, Cochrane subset. Wang & Chen, *Patterns* 7:101519 (2026) |
 
@@ -19,7 +19,7 @@ I have read the MEDAL paper, including its Table 1 (per-class results) and Table
 
 I have inspected the structure of the Cochrane file (columns, labels, review identifiers, versions, the `notes` field of the no-evidence items). That touches the data, not model behaviour. What I found is summarised in section 3 and the registration log, and it changed the design in two places: the public file's `abstract` and `publication_year` columns are empty for every row, so abstracts and years are fetched from PubMed by DOI; and the file has one question per DOI, with many reviews appearing in several versions, so I sample at most one question per review.
 
-Still to do before lock, again without any model: fetch the PubMed metadata, and check my search-date extraction by hand on 50 abstracts (section 4). The results go into the registration log. Nothing else happens before lock.
+Done before lock, again without any model: I fetched the PubMed metadata, drew the sample, and checked my search-date extraction by hand on 50 abstracts (section 4). The results are in the registration log. Nothing else happened before lock.
 
 One thing I did look at is how the generator's own supporting notes read for the no-evidence items (about a third say that no eligible studies were found). I describe it in section 10 because it shapes one planned analysis.
 
@@ -174,7 +174,7 @@ This is the usual percentile-bootstrap inversion, so the 95% percentile interval
 
 MEDAL's labels were produced by an LLM, and the oracle result suggests they follow the abstract closely. I don't want my conclusions to rest on labels I haven't looked at.
 
-**Stage 1 (automatic, before the physician).** A strong model, different from M1, M2 and GPT-4o (which generated MEDAL), reads each sampled question, its source review abstract and its label, and answers whether the abstract supports the label (prompt A.5). This is a screen, not ground truth. Questions it flags are removed in a sensitivity analysis. For no-evidence questions it also records why: (a) the abstract says the evidence is insufficient or absent, (b) the abstract doesn't address the question, (c) something else. This matters because MEDAL never defined the label (section 6) and (b) is not the same thing as (a). Judge: `claude-sonnet-5-5` through the Anthropic API, temperature 0, run date logged (TODO(lock): confirm model string on the run date). It is from a different family than M1, M2 and GPT-4o. I disclose in the paper that the judge is a commercial model and was used only as a screen.
+**Stage 1 (automatic, before the physician).** A strong model, different from M1, M2 and GPT-4o (which generated MEDAL), reads each sampled question, its source review abstract and its label, and answers whether the abstract supports the label (prompt A.5). This is a screen, not ground truth. Questions it flags are removed in a sensitivity analysis. For no-evidence questions it also records why: (a) the abstract says the evidence is insufficient or absent, (b) the abstract doesn't address the question, (c) something else. This matters because MEDAL never defined the label (section 6) and (b) is not the same thing as (a). Judge: `claude-sonnet-5-5` through the Anthropic API, temperature 0, run date logged (the exact model string is logged on the run date). It is from a different family than M1, M2 and GPT-4o. I disclose in the paper that the judge is a commercial model and was used only as a screen.
 
 **Stage 2 (physician).** A physician arranged through Dr. Eslami labels 60 questions blind to the dataset label and to every model output, using the review abstract only. For items the dataset calls no-evidence, the physician also notes whether the abstract says the evidence is insufficient or is simply silent on the question.
 
@@ -230,7 +230,7 @@ Every change goes in `AMENDMENTS.md` with the date, the reason, and whether I ha
 - Fixed seeds everywhere. Model revisions, inference library version and hardware are recorded.
 - Tests that must pass before the main run: date filter and leakage assertion, label scoring (including the prefix case), probability-mass check, de-duplication, regex extraction.
 - I use AI coding assistants to draft code. Nothing goes into the pipeline unless I've read it and a test covers it. AI assistance will be declared in the paper.
-- Retrieval cache (queries, PMIDs, timestamps), the manifest, prompts and analysis code will be released. The dataset licence is listed as "other"; TODO(lock): check what I'm allowed to redistribute.
+- Retrieval cache (queries, PMIDs, timestamps), the manifest, prompts and analysis code will be released. The dataset licence is listed as "other". I do not redistribute the MEDAL file; before releasing anything else derived from it I will check what the licence allows.
 
 ## 14. Limits I already know about
 
@@ -246,7 +246,7 @@ Every change goes in `AMENDMENTS.md` with the date, the reason, and whether I ha
 - The stage-1 judge is a commercial model I can't inspect. It is a screen only, and its flags are tested in a sensitivity analysis.
 - The physician audit may not finish in time.
 - My novelty search was a skim of about eight papers. The related-work table will not be final until I've read at least ten in full (target: 3 Nov). The table link is added to this file as a documentation-only amendment, since it changes nothing in the design.
-- A second phase is planned: a learned retrieval-side component (for example an auto-encoder over retrieved-context features that feeds no-evidence detection, suggested by Dr. Eslami on 28 Oct 2026), and possibly trained (soft) prompt tuning and adaptive choice of k. None of it is part of the present study. Its protocol is written and registered separately by 10 Nov (G2), before the main run starts, so it is written without seeing any primary result. It would train only on questions outside the manifest and the pilot (and outside the manifest's review numbers) and be evaluated on the manifest. Only its training and evaluation runs come after Phase 1, and the paper will say so.
+- A second phase is planned: a learned retrieval-side component (for example an auto-encoder over retrieved-context features that feeds no-evidence detection; Dr. Eslami suggested it on 28 Oct 2026 and, on 29 Oct, that the vector of the retrieved abstracts is enough as its input), and possibly trained (soft) prompt tuning and adaptive choice of k. None of it is part of the present study. Its protocol is written and registered separately by 10 Nov (G2), before the main run starts, so it is written without seeing any primary result. It would train only on questions outside the manifest and the pilot (and outside the manifest's review numbers) and be evaluated on the manifest. Only its training and evaluation runs come after Phase 1, and the paper will say so.
 
 ## 15. Timeline
 
@@ -263,15 +263,15 @@ Every change goes in `AMENDMENTS.md` with the date, the reason, and whether I ha
 
 ## 16. Roles
 
-Hooman Soleymani: design, code, analysis, writing; first author. Dr. Eslami: supervision, review, correspondence with the journal. Dr. Eslami confirmed on 25 Oct 2026 (message) that I am first author, that she handles the journal, and that she will arrange a physician colleague for the final evaluation, not in the short term. The physician rater and anyone else who contributes will be named in the paper. Funding: none (TODO(lock): confirm). Competing interests: none declared.
+Hooman Soleymani: design, code, analysis, writing; first author. Dr. Eslami: supervision, review, correspondence with the journal. Dr. Eslami confirmed on 25 Oct 2026 (message) that I am first author, that she handles the journal, and that she will arrange a physician colleague for the final evaluation, not in the short term. The physician rater and anyone else who contributes will be named in the paper. Funding: none. Competing interests: none declared.
 
 ## 17. Registration log
 
 | Item | Value |
 |---|---|
-| Lock date | TODO(lock) |
-| git commit and tag | TODO(lock) |
-| OSF registration | TODO(lock) |
+| Lock date | 30 Oct 2026 |
+| git commit and tag | tag `prereg-v1`; the commit hash is in `AMENDMENTS.md` |
+| OSF registration | the link is in `AMENDMENTS.md` |
 | `manifest.csv` SHA-256 | `ad89017e1fea0ef482497cbc4220e72a9e00cea09b2c82e44a9252a867eb6cd0` (seed 20261028; 900 questions from 900 distinct reviews, 300 per class, 100 per stratum, cap 1 per review; 9 with `date_fallback = 1`; drawn 26 Oct 2026 before any model run). no redraw if the lock date moves (section 3) |
 | Dataset structure check (25 Oct 2026) | 8,533 rows; 2 empty labels; 43 non-CD DOIs; 8,488 eligible (yes 5,138 / no 2,301 / NE 1,049); 7,111 CD numbers; `abstract` and `publication_year` empty in the file; dry-run draw feasible with 1 per review |
 | PubMed fetch (25 Oct 2026) | 8,450 of 8,490 CD-DOIs found (99.5%); 40 not found; 8,447 eligible rows with an abstract (yes 5,115 / no 2,288 / NE 1,044) |
@@ -279,7 +279,7 @@ Hooman Soleymani: design, code, analysis, writing; first author. Dr. Eslami: sup
 | Search-date check (n correct / 50) | 48 / 50 (threshold 45). Both misses were "later search not incorporated"; rule added, those two re-extracted correctly. No fresh 50 drawn after the rule change |
 | M1, M2, judge model, revisions | M1 Llama-3.1-8B-Instruct, M2 Qwen2.5-7B-Instruct, judge claude-sonnet-5-5 (API); revisions Llama `0e9e39f249a16976918f6564b8830bc894c89659`, Qwen `a09a35458c702b33eeacc393d103063234e8bc28` (Hugging Face, 26 Oct 2026) |
 | Supervisor suggestions (28 Oct 2026) | Prompt tuning: P4 added to section 10. Learned retrieval-side component (auto-encoder): Phase 2, registered separately before the main run (section 14). |
-| Supervisor feedback | 25 Oct 2026, by message: she reviewed my plan, called the path complete and good and the hypotheses realistic. She had not yet seen this file. Approval of this version: TODO(lock): date |
+| Supervisor feedback | 25 Oct 2026, by message: she reviewed my plan, called the path complete and good and the hypotheses realistic. She had not yet seen the file then. On 29 Oct 2026, after seeing version 1.5, she wrote (by message) "Excellent, please register it". |
 
 ---
 
